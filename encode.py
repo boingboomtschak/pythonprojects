@@ -15,7 +15,7 @@ if "-c" in myArgs.keys():
         code = {}
         for line in codefile: #parses code file and offloads information into dictionary "code"
             (key, val) = line.split(":")
-            code[str(key)] = str(val).rstrip("\n")
+            code[str(key)] = str(val).rstrip("\n") #adds code key:value pairs to dictionary and removes line breaks
         codefile.close()
         inputfile = open(myArgs["-i"], "r")
         if "-o" in myArgs.keys(): #checks if output file is specified and creates new file if not
@@ -25,13 +25,14 @@ if "-c" in myArgs.keys():
         for line in inputfile:
             thisline = []
             for char in line:
-                if char == "\n":
-                    pass
-                elif char == " ":
-                    thisline.append("/")
+                if char.lower() not in code.keys():
+                    thisline.append(str(char))
                 else:
                     thisline.append(code[str(char).lower()])
-            outputfile.write(' '.join(thisline))
+            if "end" not in code:
+                outputfile.write("".join(thisline))
+            else:
+                outputfile.write(code["end"].join(thisline))
     else:
         print("Specify an input file with -i and run the script again.")
 else:
