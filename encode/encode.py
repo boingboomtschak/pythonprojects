@@ -7,8 +7,6 @@ def getArgs (argv): #defines function to add -[letter] [input] pairs into dictio
         argv = argv[1:]
     return args
 myArgs = getArgs(argv)
-print (myArgs) #debug
-print (myArgs["-c"])
 if "-c" in myArgs.keys():
     if "-i" in myArgs.keys(): #checks basic usage of -c and -i and then runs main script
         codefile = open(myArgs["-c"], "r")
@@ -22,17 +20,18 @@ if "-c" in myArgs.keys():
             outputfile = open(myArgs["-o"], "w")
         else:
             outputfile = open("coded-"+myArgs["-i"], "w+")
-        for line in inputfile:
+        for line in inputfile: #goes through each line in input file and parses it with the code file, then writes it to the output file
             thisline = []
             for char in line:
-                if char.lower() not in code.keys():
+                if char.lower() not in code.keys(): #if the character is not declared in the code file, the program writes it as is instead of throwing an error
                     thisline.append(str(char))
                 else:
-                    thisline.append(code[str(char).lower()])
-            if "end" not in code:
-                outputfile.write("".join(thisline))
+                    thisline.append(code[str(char).lower()]) 
+            if "end" not in code: #searches for the "end" character, used at the end of each letter to separate letters
+                outputfile.write("".join(thisline)) 
             else:
                 outputfile.write(code["end"].join(thisline))
+        print("Encoded "+myArgs["-i"]+" with "+myArgs["-c"]+" and wrote output to "+outputfile.name)
     else:
         print("Specify an input file with -i and run the script again.")
 else:
