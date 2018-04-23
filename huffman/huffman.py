@@ -105,8 +105,8 @@ class Encoder(object):
         else:
             fileout = open("coded-"+self.args["-i"], "w+")
         for key, value in fdict.items(): #takes freqList and stores as header of file
-            fstr.append(str(key)+":"+str(value))
-        fileout.write("/".join(fstr)+"\n")
+            fstr.append(str(key)+"~"+str(value))
+        fileout.write("|".join(fstr)+"\n")
         for line in filein: #encodes file
             fileout.write(self.encode(line, tree))
         print("Encoding completed.")
@@ -119,21 +119,25 @@ class Encoder(object):
             fileout = open(self.args["-o"], "w")
         else:
             fileout = open("decoded-"+self.args["-i"], "w+")
-        flist = filelist[0].strip("\n").split("/")
+        flist = filelist[0].strip("\n").split("|")
         fdict = {}
         for item in flist:
-            temp = item.split(":")
+            temp = item.split("~")
             fdict[temp[0]] = temp[1]
         tree = self.createTree(fdict)
         for line in filelist[1:]:
-            print(line)
             fileout.write(self.decode(line.strip("\n"), tree)+"\n")
         print("Decoding completed")
 # class definition ends, execution begins
 encoder = Encoder() #creates instance of Encoder class
-if encoder.args["-a"] == "encode": #takes action specified by user and encodes or decodes as given, does nothing if input is unexpected
+if not encoder.args: #prints usage of program if no arguments specified
+    print("""USAGE:
+      -i <inputfile> | specifies input file for program to use, use .txt files (REQUIRED)
+     -o <outputfile> | specifies output file for program to use, use .txt files (OPTIONAL)
+  -a <encode/decode> | specifies action for program to take, only accepts encode or decode (REQUIRED)""")
+elif encoder.args["-a"] == "encode":#takes action specified by user and encodes or decodes as given, does nothing if input is unexpected
     encoder.encodeFile(encoder.args["-i"])
 elif encoder.args["-a"] == "decode":
     encoder.decodeFile(encoder.args["-i"])
 else:
-    print("Unexpected input, program closing!")
+    print("Unexpected action, please specify either encode/decode with -a <encode/decode>")
