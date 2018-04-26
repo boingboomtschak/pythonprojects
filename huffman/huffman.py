@@ -104,12 +104,17 @@ class Encoder(object):
             fileout = open(self.args["-o"], "w")
         else:
             fileout = open("coded-"+self.args["-i"], "w+")
+        if self.args["-v"] == "true":
+            print("\033[4m"+"Frequency List: "+"\033[0m"+str(fdict))
+            print("\033[4m"+"Huffman Tree: "+"\033[0m"+str(tree))
+            print("\033[4m"+"Input: "+"\033[0m"+filein.name)
+            print("\033[4m"+"Output: "+"\033[0m"+fileout.name)
         for key, value in fdict.items(): #takes freqList and stores as header of file
             fstr.append(str(key)+"~"+str(value))
         fileout.write("|".join(fstr)+"\n")
         for line in filein: #encodes file
             fileout.write(self.encode(line, tree))
-        print("Encoding completed.")
+        print("Encoded "+filein.name+" successfully, wrote output to "+fileout.name+".")
         filein.close()
         fileout.close()
     def decodeFile(self, inputfile): #decodes given input file and writes to an output file (if given) or creates a new output file
@@ -125,19 +130,35 @@ class Encoder(object):
             temp = item.split("~")
             fdict[temp[0]] = temp[1]
         tree = self.createTree(fdict)
+        if self.args["-v"] == "true":
+            print("\033[4m"+"Frequency List: "+"\033[0m"+str(fdict))
+            print("\033[4m"+"Huffman Tree: "+"\033[0m"+str(tree))
+            print("\033[4m"+"Input: "+"\033[0m"+filein.name)
+            print("\033[4m"+"Output: "+"\033[0m"+fileout.name)
         for line in filelist[1:]:
             fileout.write(self.decode(line.strip("\n"), tree)+"\n")
-        print("Decoding completed")
+        print("Decoded "+filein.name+" successfully, wrote output to "+fileout.name+".")
+        filein.close()
+        fileout.close()
 # class definition ends, execution begins
 encoder = Encoder() #creates instance of Encoder class
 if not encoder.args: #prints usage of program if no arguments specified
     print("""USAGE:
       -i <inputfile> | specifies input file for program to use, use .txt files (REQUIRED)
      -o <outputfile> | specifies output file for program to use, use .txt files (OPTIONAL)
-  -a <encode/decode> | specifies action for program to take, only accepts encode or decode (REQUIRED)""")
+  -a <encode/decode> | specifies action for program to take, only accepts encode or decode (REQUIRED)
+     -v <true/false> | enables verbose-mode on program for debugging purposes (OPTIONAL)""")
 elif encoder.args["-a"] == "encode":#takes action specified by user and encodes or decodes as given, does nothing if input is unexpected
-    encoder.encodeFile(encoder.args["-i"])
+    if '-i' in encoder.args: #checks if user specified input file
+        print("Encoding "+encoder.args["-i"]+"with huffman encoding.")
+        encoder.encodeFile(encoder.args["-i"])
+    else:
+        print("No input specified! Please run the program again and specify an input file with -i <inputfile.txt>")
 elif encoder.args["-a"] == "decode":
-    encoder.decodeFile(encoder.args["-i"])
+    if '-i' in encoder.args: #checks if user specified input file
+        print("Decoding "+encoder.args["-i"]+" with huffman encoding.")
+        encoder.decodeFile(encoder.args["-i"])
+    else:
+        print("No input specified! Please run the program again and specify an input file with -i <inputfile.txt>")
 else:
     print("Unexpected action, please specify either encode/decode with -a <encode/decode>")
