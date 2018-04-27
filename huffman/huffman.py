@@ -105,10 +105,10 @@ class Encoder(object):
         else:
             fileout = open("coded-"+self.args["-i"], "w+")
         if self.args["-v"] == "true":
-            print("\033[4m"+"Frequency List: "+"\033[0m"+str(fdict))
-            print("\033[4m"+"Huffman Tree: "+"\033[0m"+str(tree))
-            print("\033[4m"+"Input: "+"\033[0m"+filein.name)
-            print("\033[4m"+"Output: "+"\033[0m"+fileout.name)
+            print("\033[1;4m"+"Frequency List: "+"\033[0m"+str(fdict))
+            print("\033[1;4m"+"Huffman Tree: "+"\033[0m"+str(tree))
+            print("\033[1;4m"+"Input: "+"\033[0m"+filein.name)
+            print("\033[1;4m"+"Output: "+"\033[0m"+fileout.name)
         for key, value in fdict.items(): #takes freqList and stores as header of file
             fstr.append(str(key)+"~"+str(value))
         fileout.write("|".join(fstr)+"\n")
@@ -131,10 +131,10 @@ class Encoder(object):
             fdict[temp[0]] = temp[1]
         tree = self.createTree(fdict)
         if self.args["-v"] == "true":
-            print("\033[4m"+"Frequency List: "+"\033[0m"+str(fdict))
-            print("\033[4m"+"Huffman Tree: "+"\033[0m"+str(tree))
-            print("\033[4m"+"Input: "+"\033[0m"+filein.name)
-            print("\033[4m"+"Output: "+"\033[0m"+fileout.name)
+            print("\033[1;4m"+"Frequency List: "+"\033[0m"+str(fdict))
+            print("\033[1;4m"+"Huffman Tree: "+"\033[0m"+str(tree))
+            print("\033[1;4m"+"Input: "+"\033[0m"+filein.name)
+            print("\033[1;4m"+"Output: "+"\033[0m"+fileout.name)
         for line in filelist[1:]:
             fileout.write(self.decode(line.strip("\n"), tree)+"\n")
         print("Decoded "+filein.name+" successfully, wrote output to "+fileout.name+".")
