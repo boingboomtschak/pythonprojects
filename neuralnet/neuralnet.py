@@ -1,4 +1,5 @@
 import numpy as num
+import time
 def tanh(x, deriv = False):
     if(deriv==True):
         return (4*num.exp(-2*x))/((1+num.exp(-2*x))**2)
@@ -14,8 +15,9 @@ test = open("mnist/mnist_test.csv", "r")
 train = open("mnist/mnist_train.csv", "r")
 trainread = []
 trainin = []
-data = input("How many data points would you like to calculate?")
-iterations = input("How many iterations would you like to run?")
+data = input("How many data points would you like to calculate? ")
+iterations = input("How many iterations would you like to run? ")
+start_time = time.time()
 for i in range(int(data)):
     out = train.readline().strip("\n").split(",")
     out = [int(i) for i in out]
@@ -53,4 +55,4 @@ for i in range(int(iterations)):
         syn1 += l1.T.dot(l2_delta)
         syn0 += l0.T.dot(l1_delta)
 print("Error: " + str(num.mean(num.abs(l3_error))))
-
+print("--- %s seconds ---" % (time.time() - start_time))
