@@ -1,5 +1,6 @@
 import numpy as num
 import time
+import os
 def tanh(x, deriv = False):
     if(deriv==True):
         return (4*num.exp(-2*x))/((1+num.exp(-2*x))**2)
@@ -54,5 +55,6 @@ for i in range(int(iterations)):
         syn2 += l2.T.dot(l3_delta)
         syn1 += l1.T.dot(l2_delta)
         syn0 += l0.T.dot(l1_delta)
-print("Error: " + str(num.mean(num.abs(l3_error))))
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print("Error: " + str(num.mean(num.abs(l3_error))))
 print("--- %s seconds ---" % (time.time() - start_time))
