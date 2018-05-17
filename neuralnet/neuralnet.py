@@ -57,4 +57,5 @@ for i in range(int(iterations)):
         syn0 += l0.T.dot(l1_delta)
     os.system('cls' if os.name == 'nt' else 'clear')
     print("Error: " + str(num.mean(num.abs(l3_error))))
+    print(str(1/num.mean(num.abs(l3_error))))
 print("--- %s seconds ---" % (time.time() - start_time))
