@@ -1,0 +1,6 @@
+test = open("mnist/mnist_test.csv", "r")
+train = open("mnist/mnist_train.csv", "r")
+testlines = test.readlines()
+trainlines = train.readlines()
+print("Test length: " + str(len(testlines)) + " lines")
+print("Train length: " + str(len(trainlines)) + " lines")

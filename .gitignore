@@ -1,1 +1,3 @@
 .vscode/settings.json
+neuralnet/mnist/mnist_train.csv
+neuralnet/mnist/mnist_test.csv
