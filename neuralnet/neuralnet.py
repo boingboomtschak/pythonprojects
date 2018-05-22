@@ -52,7 +52,7 @@ for i in range(int(iterations)):
         l2_delta = l2_error * tanh(l2, deriv=True)
         l1_error = l2_delta.dot(syn1.T)
         l1_delta = l1_error * tanh(l1,deriv=True)
-        syn2 += l2.dot(l3_delta) #adjusts layer weights accordingly
+        syn2 += l2.T.dot(l3_delta) #adjusts layer weights accordingly
         syn1 += l1.T.dot(l2_delta)
         syn0 += l0.T.dot(l1_delta)
     os.system('cls' if os.name == 'nt' else 'clear') #clears terminal
