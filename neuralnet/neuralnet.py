@@ -35,20 +35,20 @@ for line in trainread:
         values = values[28:]
     trainin.append([target, matrix])
 syn0 = 2*num.random.random((28,28))-1 #initializes random weights with mean of 0
-syn1 = 2*num.random.random((28,28))-1
-syn2 = 2*num.random.random((28,1))-1
+syn1 = 2*num.random.random((28,1))-1
+syn2 = 2*num.random.random((1,28))-1
 #data loading ends, training begins
 for i in range(int(iterations)):
     for item in trainin:
         l0 = num.array(item[1])
-        l1 = tanh(num.dot(l0,syn0))
+        l1 = tanh(num.dot(l0, syn0))
         l2 = tanh(num.dot(l1, syn1))
         l3 = tanh(num.dot(l2, syn2))
         Y = num.array(numto28bit(item[0]))
         #training error check
         l3_error = Y - l3
         l3_delta = l3_error * tanh(l3, deriv=True) #adjusts change in weights by derivative of activation function so as to reduce the change (delta) in layer weights
-        l2_error = l3_delta.dot(syn2)
+        l2_error = l3_delta.dot(syn2.T)
         l2_delta = l2_error * tanh(l2, deriv=True)
         l1_error = l2_delta.dot(syn1.T)
         l1_delta = l1_error * tanh(l1,deriv=True)
@@ -56,7 +56,7 @@ for i in range(int(iterations)):
         syn1 += l1.T.dot(l2_delta)
         syn0 += l0.T.dot(l1_delta)
     os.system('cls' if os.name == 'nt' else 'clear') #clears terminal
-    print(Y)
-    print(l3_error)
-    print("Error: " + str(num.mean(num.abs(l3_error))))
+    print("--- Error: %s ---" % str(num.mean(num.abs(l3_error))))
 print("--- %s seconds ---" % (time.time() - start_time)) #"stops" timer
+print("--- %s data points ---" % data)
+print("--- %s iterations ---" % iterations)
